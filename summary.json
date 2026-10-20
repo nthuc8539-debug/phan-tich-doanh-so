@@ -1,0 +1,66 @@
+{
+  "kpi": {
+    "tong_don": 4000,
+    "tong_doanh_thu": 22134083650.0,
+    "gia_tri_don_tb": 5533520.9125,
+    "gia_tri_don_median": 2641700.0,
+    "so_khach_hang": 1158,
+    "tong_so_luong": 9211,
+    "ty_le_giam_gia_tb_%": 3.9625
+  },
+  "cleaning": {
+    "rows_in": 4020,
+    "rows_out": 4000,
+    "duplicates_removed": 20,
+    "missing_before": {
+      "order_id": 0,
+      "order_date": 0,
+      "customer_id": 0,
+      "product": 0,
+      "category": 0,
+      "region": 26,
+      "channel": 0,
+      "quantity": 41,
+      "unit_price": 15,
+      "discount": 0
+    },
+    "quantity_filled": 45,
+    "price_filled": 15,
+    "region_filled": 25,
+    "outliers_price": 6,
+    "outliers_quantity": 5,
+    "channel_fixed": 31
+  },
+  "pareto": {
+    "so_khach_80": 563,
+    "pct_khach_80": 48.61830742659758
+  },
+  "weekend_test": {
+    "t": 1.77605100791746,
+    "dof": 202.7847392454554,
+    "p_value": 0.07572451021708182,
+    "mean_a": 65369268.75,
+    "mean_b": 58757393.486590035
+  },
+  "sale_days": {
+    "sale_mean": 166724433.33333334,
+    "other_mean": 94047337.5,
+    "ratio": 1.7727714336765072,
+    "n_sale_days": 6
+  },
+  "forecast": {
+    "next_3_months": [
+      3638789128.926766,
+      2236744570.0358434,
+      2705503553.598758
+    ],
+    "seasonal_naive": [
+      1919645500.0,
+      1220025050.0,
+      1520591900.0
+    ],
+    "r2_trend": 0.41087522171347657,
+    "mape_holdout_trend_%": 25.082948655423383,
+    "mape_holdout_mean_%": 27.772052088980566
+  }
+}

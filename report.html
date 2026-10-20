@@ -1,0 +1,504 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Báo cáo phân tích dữ liệu bán hàng</title><style>
+@page { size: A4; margin: 18mm 18mm 18mm 20mm;
+  @bottom-center { content: counter(page); font: 9pt 'Inter', sans-serif; color: #666; } }
+@page :first { margin: 0; @bottom-center { content: none; } }
+* { box-sizing: border-box; }
+html { font-family: 'Inter', 'DejaVu Sans', sans-serif; font-size: 10pt; line-height: 1.42; color: #1a1a1a; }
+body { margin: 0; }
+p { margin: 0 0 8pt; text-align: justify; hyphens: auto; }
+h1 { font-size: 26pt; line-height: 1.2; margin: 0 0 12pt; color: #12305f; }
+h2 { font-size: 15pt; color: #12305f; border-bottom: 2px solid #2a78d6; padding-bottom: 3pt; margin: 16pt 0 8pt; break-after: avoid; }
+h2.plain { border: 0; padding: 0; margin-top: 0; font-size: 18pt; }
+h3 { font-size: 11.6pt; color: #1d4f9c; margin: 14pt 0 6pt; break-after: avoid; }
+code { font-family: 'DejaVu Sans Mono', monospace; font-size: 8.8pt; background: #eef2f8; padding: 0 2pt; border-radius: 2pt; }
+ul, ol { margin: 0 0 8pt; padding-left: 18pt; } li { margin-bottom: 3pt; text-align: justify; }
+section { break-inside: auto; }
+.pb { break-before: page; }
+.cover { height: 297mm; padding: 28mm 24mm 22mm; display: flex; flex-direction: column; background: linear-gradient(180deg,#f4f8fe 0%,#fff 55%); border-left: 14mm solid #2a78d6; }
+.cv-top { letter-spacing: 3pt; font-size: 10pt; color: #52514e; font-weight: 600; }
+.cv-mid { margin: auto 0; } .cv-topic { color: #2a78d6; font-weight: 700; font-size: 13pt; margin-bottom: 8pt; }
+.cv-sub { font-size: 12pt; color: #404040; max-width: 130mm; }
+.cv-info { border-collapse: collapse; font-size: 10.5pt; margin-bottom: 16mm; width: 100%; }
+.cv-info td { padding: 5pt 0; border-bottom: 1px solid #d8dee9; } .cv-info td:first-child { color: #52514e; width: 46mm; }
+.ph { color: #b3541e; font-style: italic; } .cv-foot { color: #52514e; font-size: 10pt; }
+.toc .tr1, .toc .tr2 { display: flex; align-items: baseline; gap: 4pt; } .toc i { flex: 1; border-bottom: 1px dotted #999; transform: translateY(-3pt); }
+.toc .tr1 { font-weight: 600; margin-top: 4pt; font-size: 9.6pt; } .toc .tr2 { padding-left: 14pt; font-size: 8.4pt; color: #333; line-height: 1.3; }
+figure { margin: 6pt auto 8pt; text-align: center; break-inside: avoid; } figure img { width: 100%; border: 1px solid #e4e3df; }
+figcaption, .cap { font-size: 9pt; color: #444; margin-top: 4pt; text-align: center; } .cap.center { margin: 4pt 0 10pt; }
+.tblwrap { break-inside: avoid; margin: 6pt 0 10pt; } .tblwrap .cap { text-align: left; margin: 0 0 4pt; font-weight: 400; }
+table.tbl { width: 100%; border-collapse: collapse; font-size: 9.2pt; } table.tbl.small { font-size: 8.4pt; }
+.tbl th { background: #12305f; color: #fff; padding: 4pt 6pt; font-weight: 600; } .tbl td { padding: 3.5pt 6pt; border-bottom: 1px solid #e0e4ec; vertical-align: top; }
+.tbl tbody tr:nth-child(even) td { background: #f6f8fc; } .l { text-align: left; } .r { text-align: right; } .center { text-align: center; }
+table.tbl { break-inside: auto; } tr { break-inside: avoid; }
+pre.code { font-family: 'DejaVu Sans Mono', monospace; font-size: 6.6pt; line-height: 1.3; background: #f5f6f8; border: 1px solid #dfe3ea; border-left: 3px solid #2a78d6; padding: 6pt 8pt; white-space: pre-wrap; margin: 0 0 12pt; word-break: break-word; }
+.codetitle { font-size: 9pt; font-weight: 600; color: #12305f; margin: 8pt 0 3pt; break-after: avoid; }
+.flow { display: flex; align-items: center; justify-content: center; gap: 4pt; margin: 10pt 0 2pt; }
+.fb { border: 1.5px solid #2a78d6; border-radius: 6pt; padding: 8pt 8pt; text-align: center; font-weight: 600; font-size: 9.4pt; background: #f4f8fe; flex: 1; }
+.fb small { font-weight: 400; color: #52514e; } .fb.out { background: #2a78d6; color: #fff; } .fb.out small { color: #dce8fa; } .fa { color: #2a78d6; font-size: 15pt; }
+.refs li { margin-bottom: 5pt; text-align: left; } .kw { color: #333; }
+</style></head><body>
+<section class="cover">
+  <div class="cv-top">BÁO CÁO DỰ ÁN MÔN HỌC</div>
+  <div class="cv-mid">
+    <div class="cv-topic">Chủ đề 5.5</div>
+    <h1>Phân tích dữ liệu bán hàng<br>với NumPy, Pandas và Matplotlib</h1>
+    <div class="cv-sub">Xây dựng pipeline hoàn chỉnh: làm sạch dữ liệu, phân tích, trực quan hóa và dự báo</div>
+  </div>
+  <table class="cv-info">
+    <tr><td>Sinh viên thực hiện</td><td>Nguyễn Đình Thực</td></tr>
+    <tr><td>Mã số sinh viên</td><td class="ph">[điền MSSV]</td></tr>
+    <tr><td>Lớp / Khoa</td><td class="ph">[điền lớp, khoa]</td></tr>
+    <tr><td>Học phần</td><td class="ph">[điền tên học phần]</td></tr>
+    <tr><td>Giảng viên hướng dẫn</td><td class="ph">[điền tên giảng viên]</td></tr>
+    <tr><td>Mã nguồn</td><td class="ph">[dán link GitHub]</td></tr>
+    <tr><td>Video demo</td><td class="ph">[dán link YouTube]</td></tr>
+  </table>
+  <div class="cv-foot">Hà Nội, tháng 10/2026</div>
+</section>
+<section class="toc pb"><h2 class="plain">Mục lục</h2><div class="tr1"><span>Tóm tắt</span><i></i><b>3</b></div><div class="tr1"><span>1. Giới thiệu</span><i></i><b>3</b></div><div class="tr2"><span>1.1. Bối cảnh và lý do chọn đề tài</span><i></i><b>3</b></div><div class="tr2"><span>1.2. Mục tiêu</span><i></i><b>3</b></div><div class="tr2"><span>1.3. Câu hỏi nghiên cứu</span><i></i><b>4</b></div><div class="tr2"><span>1.4. Phạm vi và giới hạn</span><i></i><b>4</b></div><div class="tr1"><span>2. Cơ sở lý thuyết và công nghệ</span><i></i><b>4</b></div><div class="tr2"><span>2.1. NumPy</span><i></i><b>4</b></div><div class="tr2"><span>2.2. Pandas</span><i></i><b>4</b></div><div class="tr2"><span>2.3. Matplotlib</span><i></i><b>4</b></div><div class="tr2"><span>2.4. Các phương pháp phân tích sử dụng</span><i></i><b>5</b></div><div class="tr1"><span>3. Dữ liệu</span><i></i><b>5</b></div><div class="tr2"><span>3.1. Mô tả bộ dữ liệu</span><i></i><b>5</b></div><div class="tr2"><span>3.2. Cách sinh dữ liệu</span><i></i><b>6</b></div><div class="tr2"><span>3.3. Dữ liệu bẩn được chèn có chủ đích</span><i></i><b>6</b></div><div class="tr1"><span>4. Thiết kế hệ thống</span><i></i><b>6</b></div><div class="tr2"><span>4.1. Kiến trúc tổng thể</span><i></i><b>6</b></div><div class="tr2"><span>4.2. Các quyết định thiết kế đáng chú ý</span><i></i><b>7</b></div><div class="tr2"><span>4.3. Giao diện dòng lệnh</span><i></i><b>7</b></div><div class="tr1"><span>5. Tiền xử lý và làm sạch dữ liệu</span><i></i><b>7</b></div><div class="tr2"><span>5.1. Khảo sát chất lượng ban đầu</span><i></i><b>7</b></div><div class="tr2"><span>5.2. Quy trình làm sạch</span><i></i><b>8</b></div><div class="tr2"><span>5.3. Xử lý ngoại lai đơn giá</span><i></i><b>8</b></div><div class="tr2"><span>5.4. Đặc trưng mới</span><i></i><b>9</b></div><div class="tr1"><span>6. Kết quả phân tích</span><i></i><b>9</b></div><div class="tr2"><span>6.1. Tổng quan (KPI)</span><i></i><b>9</b></div><div class="tr2"><span>6.2. Doanh thu theo thời gian</span><i></i><b>10</b></div><div class="tr2"><span>6.3. Doanh thu theo sản phẩm</span><i></i><b>12</b></div><div class="tr2"><span>6.4. Khu vực và kênh bán</span><i></i><b>13</b></div><div class="tr2"><span>6.5. Hiệu ứng khuyến mãi</span><i></i><b>13</b></div><div class="tr2"><span>6.6. Mức độ tập trung doanh thu – Pareto</span><i></i><b>14</b></div><div class="tr2"><span>6.7. Phân khúc khách hàng – RFM</span><i></i><b>15</b></div><div class="tr2"><span>6.8. Tương quan giữa các biến</span><i></i><b>15</b></div><div class="tr1"><span>7. Dự báo doanh thu</span><i></i><b>16</b></div><div class="tr2"><span>7.1. Phương pháp</span><i></i><b>16</b></div><div class="tr2"><span>7.2. Đánh giá và hạn chế</span><i></i><b>16</b></div><div class="tr1"><span>8. Kiểm thử và đảm bảo chất lượng</span><i></i><b>16</b></div><div class="tr1"><span>9. Hướng dẫn cài đặt và sử dụng</span><i></i><b>18</b></div><div class="tr2"><span>9.1. Yêu cầu</span><i></i><b>18</b></div><div class="tr2"><span>9.2. Các bước</span><i></i><b>18</b></div><div class="tr2"><span>9.3. Dùng dữ liệu riêng</span><i></i><b>18</b></div><div class="tr2"><span>9.4. Sản phẩm bàn giao</span><i></i><b>18</b></div><div class="tr1"><span>10. Kết luận và hướng phát triển</span><i></i><b>18</b></div><div class="tr2"><span>10.1. Trả lời các câu hỏi nghiên cứu</span><i></i><b>18</b></div><div class="tr2"><span>10.2. Kết quả đạt được</span><i></i><b>19</b></div><div class="tr2"><span>10.3. Hạn chế</span><i></i><b>19</b></div><div class="tr2"><span>10.4. Hướng phát triển</span><i></i><b>19</b></div><div class="tr1"><span>Tài liệu tham khảo</span><i></i><b>19</b></div><div class="tr1"><span>Phụ lục A. Trích đoạn mã nguồn</span><i></i><b>20</b></div></section>
+
+<section class="pb">
+<h2 class="plain">Tóm tắt</h2>
+<p>Báo cáo trình bày dự án <b>phân tích dữ liệu bán hàng</b> của một cửa hàng điện tử (dữ liệu <b>mô phỏng</b>) trong năm 2025,
+sử dụng ba thư viện nền tảng của hệ sinh thái Python cho khoa học dữ liệu: <b>NumPy</b> (tính toán mảng và mô phỏng),
+<b>Pandas</b> (xử lý bảng dữ liệu) và <b>Matplotlib</b> (vẽ biểu đồ). Dự án được tổ chức như một chương trình Python có cấu trúc
+chuẩn (package, giao diện dòng lệnh, kiểm thử tự động), thay vì một tệp script rời rạc.</p>
+<p>Dữ liệu đầu vào gồm 4.020 dòng đơn hàng thô, cố ý chứa các lỗi thường gặp: ô thiếu, dòng trùng, ngoại lai do nhập thừa số 0
+và chuỗi viết không thống nhất. Sau làm sạch còn 4.000 đơn hàng hợp lệ với tổng doanh thu <b>22,13 tỷ đồng</b>,
+1.158 khách hàng. Các kết quả chính:</p>
+<ul>
+<li>Điện thoại và Laptop chiếm <b>62,8%</b> doanh thu; tháng 11 đạt đỉnh với 3,26 tỷ.</li>
+<li>Ngày khuyến mãi lớn (11/11 và 24–28/11) có doanh thu mỗi ngày gấp <b>1,77 lần</b> các ngày còn lại của tháng 11.</li>
+<li>Doanh thu cuối tuần cao hơn ngày thường nhưng chênh lệch <b>chưa có ý nghĩa thống kê</b> (Welch t-test, p = 0,076).</li>
+<li>Cần <b>49%</b> số khách (563 người) để tạo 80% doanh thu, nghĩa là doanh thu khá phân tán, không theo quy luật 80/20.</li>
+<li>Phân khúc VIP theo RFM (186 khách) đóng góp 32,2% doanh thu.</li>
+</ul>
+<p>Dự án gồm 13 biểu đồ, bảng tổng hợp Excel và 21 bài kiểm thử tự động đều đạt. Báo cáo cũng nêu rõ các hạn chế, đặc biệt là
+dữ liệu mô phỏng và mô hình dự báo chỉ mang tính minh họa.</p>
+<p class="kw"><b>Từ khóa:</b> phân tích dữ liệu, NumPy, Pandas, Matplotlib, làm sạch dữ liệu, RFM, Pareto, dự báo chuỗi thời gian.</p>
+</section>
+
+<section>
+<h2 id="c1">1. Giới thiệu</h2>
+<h3>1.1. Bối cảnh và lý do chọn đề tài</h3>
+<p>Dữ liệu bán hàng là nguồn thông tin quan trọng nhất của một doanh nghiệp bán lẻ: nó cho biết sản phẩm nào đang kéo doanh thu,
+thời điểm nào khách mua nhiều, khu vực hay kênh nào hiệu quả và nhóm khách nào đáng chăm sóc. Tuy nhiên dữ liệu thô gần như luôn
+“bẩn” – có ô trống, nhập sai, trùng lặp – và chỉ trở nên hữu ích sau khi được làm sạch, tổng hợp và trình bày bằng hình ảnh dễ hiểu.</p>
+<p>Python với bộ ba NumPy – Pandas – Matplotlib là lựa chọn phổ biến nhất cho các bước này nhờ cú pháp ngắn gọn, hiệu năng tốt
+(tính toán vector hóa) và cộng đồng lớn. Đề tài 5.5 của học phần yêu cầu vận dụng ba thư viện này vào một bài toán phân tích dữ liệu
+cơ bản; dự án này chọn bài toán <b>phân tích doanh số bán hàng</b> vì dữ liệu quen thuộc, có nhiều chiều (thời gian, sản phẩm, khu vực,
+kênh, khách hàng) và cho phép minh họa hầu hết các kỹ thuật cơ bản.</p>
+
+<h3>1.2. Mục tiêu</h3>
+<ul>
+<li>Xây dựng <b>pipeline</b> hoàn chỉnh: sinh/đọc dữ liệu → làm sạch → phân tích → trực quan hóa → xuất báo cáo, chạy bằng một dòng lệnh.</li>
+<li>Vận dụng đúng vai trò từng thư viện: NumPy cho mô phỏng và thuật toán số, Pandas cho xử lý bảng, Matplotlib cho biểu đồ.</li>
+<li>Trả lời các <b>câu hỏi kinh doanh</b> bằng số liệu, kèm kiểm định thống kê khi cần thiết.</li>
+<li>Bảo đảm chất lượng: mã nguồn có cấu trúc, có kiểm thử tự động, kết quả tái lập được.</li>
+</ul>
+
+<h3>1.3. Câu hỏi nghiên cứu</h3>
+<table class="tbl"><thead><tr><th class="l">Mã</th><th class="l">Câu hỏi</th><th class="l">Phương pháp</th></tr></thead><tbody>
+<tr><td>Q1</td><td>Doanh thu thay đổi thế nào theo tháng và theo ngày trong tuần?</td><td>groupby, trung bình động, Welch t-test</td></tr>
+<tr><td>Q2</td><td>Sản phẩm, khu vực và kênh nào đóng góp nhiều nhất?</td><td>groupby, pivot_table</td></tr>
+<tr><td>Q3</td><td>Các đợt khuyến mãi lớn có làm tăng doanh thu không?</td><td>So sánh doanh thu/ngày</td></tr>
+<tr><td>Q4</td><td>Doanh thu tập trung vào bao nhiêu phần trăm khách hàng?</td><td>Đường Pareto</td></tr>
+<tr><td>Q5</td><td>Có thể chia khách hàng thành những phân khúc nào?</td><td>Phân tích RFM</td></tr>
+<tr><td>Q6</td><td>Doanh thu những tháng tới có thể ra sao?</td><td>Hồi quy tuyến tính + chỉ số mùa vụ</td></tr>
+</tbody></table>
+
+<h3>1.4. Phạm vi và giới hạn</h3>
+<p>Dự án dùng <b>dữ liệu mô phỏng</b> thay vì số liệu của doanh nghiệp thật, vì dữ liệu thật thường không được công bố và cần che thông tin khách hàng.
+Mô phỏng có kiểm soát còn có lợi: ta biết trước “đáp án” (ví dụ mùa vụ, đợt giảm giá) nên đánh giá được phương pháp phân tích có tìm ra đúng hay không.
+Hệ quả là các “phát hiện” chỉ có giá trị minh họa kỹ thuật, không suy ra được kết luận về thị trường thực.</p>
+</section>
+
+<section>
+<h2 id="c2">2. Cơ sở lý thuyết và công nghệ</h2>
+<h3>2.1. NumPy</h3>
+<p>NumPy cung cấp kiểu dữ liệu <code>ndarray</code> – mảng nhiều chiều, cùng kiểu, lưu liên tục trong bộ nhớ – cùng các phép toán được cài đặt bằng C.
+Hai ý tưởng quan trọng nhất là <b>vector hóa</b> (thực hiện phép toán trên cả mảng thay vì vòng lặp Python) và <b>broadcasting</b>
+(tự động “kéo giãn” mảng nhỏ để khớp mảng lớn). Nhờ đó mã ngắn hơn và nhanh hơn nhiều lần.</p>
+<p>Trong dự án, NumPy được dùng để: (1) sinh dữ liệu ngẫu nhiên có kiểm soát bằng <code>np.random.default_rng(seed)</code> – với cùng seed, kết quả
+luôn giống nhau; (2) tính các đại lượng thống kê (<code>np.corrcoef</code>, phân vị); (3) khớp đường xu hướng bằng
+<code>np.polyfit</code> – phương pháp bình phương tối thiểu; (4) cài đặt kiểm định Welch.</p>
+
+<h3>2.2. Pandas</h3>
+<p>Pandas xây dựng trên NumPy, cung cấp <code>Series</code> (cột) và <code>DataFrame</code> (bảng có nhãn hàng, cột). Các thao tác trung tâm của dự án:</p>
+<ul>
+<li><b>Đọc/ghi và kiểm tra</b>: <code>read_csv</code>, <code>isna</code>, <code>nunique</code>, <code>describe</code>.</li>
+<li><b>Làm sạch</b>: <code>drop_duplicates</code>, <code>fillna</code>, <code>str.strip</code>, <code>map</code>, <code>to_datetime</code>.</li>
+<li><b>Tổng hợp</b>: <code>groupby(...).agg(...)</code> theo mô hình tách – áp dụng – gộp; <code>pivot_table</code> để tạo bảng chéo hai chiều.</li>
+<li><b>Chuỗi thời gian</b>: thuộc tính <code>.dt</code>, <code>rolling</code> (trung bình động), <code>pct_change</code> (tăng trưởng).</li>
+<li><b>Phân nhóm theo phân vị</b>: <code>qcut</code> – dùng cho chấm điểm RFM.</li>
+</ul>
+
+<h3>2.3. Matplotlib</h3>
+<p>Matplotlib là thư viện vẽ biểu đồ nền tảng của Python. Dự án dùng <b>giao diện hướng đối tượng</b> (<code>fig, ax = plt.subplots()</code>)
+thay vì giao diện <code>pyplot</code> ngầm định, vì kiểm soát được từng trục và dễ tái sử dụng trong hàm. Toàn bộ kiểu dáng
+(màu, lưới, phông chữ) được đặt một lần trong <code>rcParams</code> để 13 biểu đồ có giao diện thống nhất.</p>
+
+<h3>2.4. Các phương pháp phân tích sử dụng</h3>
+<p><b>Phát hiện ngoại lai bằng IQR (Tukey).</b> Gọi Q1, Q3 là tứ phân vị thứ nhất và thứ ba, IQR = Q3 − Q1. Giá trị nằm ngoài
+[Q1 − k·IQR, Q3 + k·IQR] bị coi là ngoại lai; k = 1,5 là “hàng rào trong” thông thường, k = 3 là “hàng rào ngoài” dành cho giá trị
+cực đoan. Dự án dùng k = 3 cho đơn giá theo từng sản phẩm để chỉ bắt các lỗi rõ ràng (nhập thừa số 0), tránh loại nhầm biến động bình thường.</p>
+<p><b>Quy tắc Pareto.</b> Sắp khách hàng theo doanh thu giảm dần rồi vẽ tỷ lệ doanh thu lũy kế theo tỷ lệ khách. Nếu một nhóm nhỏ khách
+tạo phần lớn doanh thu (quy luật 80/20), đường cong sẽ cong mạnh; càng sát đường chéo thì doanh thu càng phân tán đều.</p>
+<p><b>Phân tích RFM.</b> Mỗi khách được chấm ba chỉ số: <b>R</b>ecency (số ngày kể từ lần mua gần nhất – càng nhỏ càng tốt),
+<b>F</b>requency (số lần mua) và <b>M</b>onetary (tổng chi tiêu). Mỗi chỉ số được chia thành 4 nhóm theo phân vị và cho điểm 1–4; tổng điểm
+(3–12) quyết định phân khúc.</p>
+<p><b>Hồi quy tuyến tính và chỉ số mùa vụ.</b> Đường xu hướng ŷ = a·t + b được tìm bằng bình phương tối thiểu. Hệ số xác định
+R² = 1 − SS<sub>res</sub>/SS<sub>tot</sub> đo phần biến thiên được giải thích. Chỉ số mùa vụ của tháng t là tỷ số giữa giá trị thực và giá trị xu hướng;
+dự báo bằng <i>xu hướng × chỉ số mùa vụ</i> (mô hình nhân, xem Hyndman &amp; Athanasopoulos, 2021).</p>
+<p><b>Kiểm định Welch.</b> So sánh trung bình hai nhóm có phương sai khác nhau: t = (x̄<sub>1</sub> − x̄<sub>2</sub>) / √(s<sub>1</sub>²/n<sub>1</sub> + s<sub>2</sub>²/n<sub>2</sub>).
+Giả thuyết H₀: hai trung bình bằng nhau; p-value nhỏ hơn 0,05 được xem là có ý nghĩa thống kê. Dự án cài đặt thuần NumPy
+và đối chiếu với SciPy trong bài kiểm thử.</p>
+</section>
+
+<section>
+<h2 id="c3">3. Dữ liệu</h2>
+<h3>3.1. Mô tả bộ dữ liệu</h3>
+<p>Bộ dữ liệu mô phỏng 4.000 đơn hàng của một cửa hàng điện tử trong năm 2025, mỗi dòng là một đơn gồm một loại sản phẩm.
+Bảng dưới liệt kê các cột; dự án còn tạo thêm các cột dẫn xuất (<code>revenue</code>, <code>month</code>, <code>quarter</code>,
+<code>weekday</code>, <code>is_weekend</code>, <code>price_tier</code>) ở bước làm sạch.</p>
+<div class="tblwrap"><div class="cap"><b>Bảng 3.1.</b> Cấu trúc dữ liệu đầu vào</div><table class="tbl"><thead><tr><th class="l">Cột</th><th class="l">Kiểu</th><th class="l">Ý nghĩa</th></tr></thead><tbody><tr><td class="l"><code>order_id</code></td><td class="l">chuỗi</td><td class="l">Mã đơn hàng, duy nhất</td></tr><tr><td class="l"><code>order_date</code></td><td class="l">ngày</td><td class="l">Ngày đặt hàng (1/1–31/12/2025)</td></tr><tr><td class="l"><code>customer_id</code></td><td class="l">chuỗi</td><td class="l">Mã khách hàng (KH0001–KH1200)</td></tr><tr><td class="l"><code>product</code></td><td class="l">chuỗi</td><td class="l">Sản phẩm (8 loại)</td></tr><tr><td class="l"><code>category</code></td><td class="l">chuỗi</td><td class="l">Danh mục: Máy tính, Điện thoại, Phụ kiện</td></tr><tr><td class="l"><code>region</code></td><td class="l">chuỗi</td><td class="l">Khu vực: Hà Nội, Đà Nẵng, TP.HCM, Cần Thơ</td></tr><tr><td class="l"><code>channel</code></td><td class="l">chuỗi</td><td class="l">Kênh bán: Cửa hàng, Website, Sàn TMĐ</td></tr><tr><td class="l"><code>quantity</code></td><td class="l">số</td><td class="l">Số lượng trong đơn</td></tr><tr><td class="l"><code>unit_price</code></td><td class="l">số</td><td class="l">Đơn giá thực tế (VND)</td></tr><tr><td class="l"><code>discount</code></td><td class="l">số 0–1</td><td class="l">Tỷ lệ giảm giá</td></tr></tbody></table></div>
+
+<h3>3.2. Cách sinh dữ liệu</h3>
+<p>Để dữ liệu có cấu trúc “có thật” nhưng vẫn kiểm soát được, hàm <code>generate_sales()</code> áp dụng các quy tắc sau:</p>
+<ul>
+<li><b>Mùa vụ theo tháng</b>: hệ số cao ở tháng 1 (Tết, 1,25), tháng 8–9 (khai giảng, 1,15–1,20) và tháng 11–12 (mua sắm cuối năm, 1,45 và 1,35).</li>
+<li><b>Xu hướng tăng</b> khoảng 15% trong năm và <b>cuối tuần đông hơn</b> ngày thường 20%.</li>
+<li><b>Khuyến mãi lớn</b> vào 11/11 và 24–28/11: lượng đơn gấp 2,5 lần và mức giảm giá 15–30%.</li>
+<li><b>Giá</b> dao động ±5% quanh giá niêm yết; hàng đắt tiền (laptop, điện thoại, máy tính bảng, màn hình) chủ yếu mua 1–2 cái, phụ kiện mua 1–5 cái.</li>
+<li><b>Khách hàng</b> chọn ngẫu nhiên trong 1.200 mã; <b>khu vực</b> và <b>kênh</b> theo xác suất cố định.</li>
+</ul>
+<p>Ngày đặt hàng được rút bằng <code>rng.choice(days, p=w/w.sum())</code> với w là tích các hệ số trên – một ứng dụng trực tiếp của vector hóa NumPy.
+Toàn bộ quá trình dùng seed = 42 nên bộ dữ liệu giống hệt nhau ở mọi lần chạy.</p>
+
+<h3>3.3. Dữ liệu bẩn được chèn có chủ đích</h3>
+<p>Để thực hành làm sạch, hàm <code>_inject_dirt()</code> chèn thêm: 40 ô thiếu số lượng, 25 ô thiếu khu vực, 15 ô thiếu đơn giá;
+6 đơn giá bị nhân 10 (nhập thừa số 0); 5 số lượng bằng 99; 30 giá trị kênh viết hoa kèm khoảng trắng; và 20 dòng trùng lặp hoàn toàn.
+Biết trước các lỗi này cho phép kiểm tra pipeline có phát hiện và xử lý đúng đủ hay không (xem Chương 5 và Chương 8).</p>
+</section>
+
+<section>
+<h2 id="c4">4. Thiết kế hệ thống</h2>
+<h3>4.1. Kiến trúc tổng thể</h3>
+<p>Dự án được chia thành các module nhỏ, mỗi module một trách nhiệm (nguyên tắc <i>single responsibility</i>). Các hàm phân tích
+<b>không vẽ</b>, các hàm vẽ <b>không tính toán nghiệp vụ</b>, và chỉ <code>cli.py</code> biết thứ tự thực hiện. Cách tách này giúp
+kiểm thử từng phần độc lập và thay thế dữ liệu đầu vào mà không phải sửa mã phân tích.</p>
+<div class="flow">
+  <div class="fb">Dữ liệu thô<br><small>CSV</small></div><div class="fa">→</div>
+  <div class="fb">Làm sạch<br><small>cleaning.py</small></div><div class="fa">→</div>
+  <div class="fb">Phân tích<br><small>analysis.py</small></div><div class="fa">→</div>
+  <div class="fb">Trực quan hóa<br><small>visualize.py</small></div><div class="fa">→</div>
+  <div class="fb out">Báo cáo<br><small>PNG · XLSX · JSON</small></div>
+</div>
+<div class="cap center"><b>Hình 0.</b> Luồng xử lý của pipeline</div>
+<div class="tblwrap"><div class="cap"><b>Bảng 4.1.</b> Các module của gói <code>salesanalysis</code></div><table class="tbl"><thead><tr><th class="l">Module</th><th class="l">Trách nhiệm</th><th class="l">Thư viện</th></tr></thead><tbody><tr><td class="l"><code>generate.py</code></td><td class="l">Sinh dữ liệu mô phỏng, chèn dữ liệu bẩn</td><td class="l">NumPy, Pandas</td></tr><tr><td class="l"><code>cleaning.py</code></td><td class="l">Đọc CSV, kiểm tra chất lượng, làm sạch, tạo đặc trưng, báo cáo làm sạch</td><td class="l">Pandas, NumPy</td></tr><tr><td class="l"><code>analysis.py</code></td><td class="l">KPI, tổng hợp, Pareto, RFM, tương quan, dự báo, kiểm định</td><td class="l">Pandas, NumPy</td></tr><tr><td class="l"><code>visualize.py</code></td><td class="l">13 hàm vẽ biểu đồ, bảng màu và kiểu dáng thống nhất</td><td class="l">Matplotlib</td></tr><tr><td class="l"><code>cli.py</code></td><td class="l">Giao diện dòng lệnh, điều phối pipeline, xuất CSV/Excel/JSON</td><td class="l">argparse, Pandas</td></tr></tbody></table></div>
+
+<h3>4.2. Các quyết định thiết kế đáng chú ý</h3>
+<ul>
+<li><b>Hàm thuần (pure function).</b> <code>clean()</code> sao chép dữ liệu (<code>df.copy()</code>) và không sửa đầu vào; có bài kiểm thử riêng cho tính chất này.</li>
+<li><b>Báo cáo làm sạch</b> (<code>CleaningReport</code>, dùng <code>dataclass</code>) ghi lại từng thay đổi, nên người đọc biết chính xác dữ liệu đã bị can thiệp ra sao.</li>
+<li><b>Điền thiếu theo median của từng sản phẩm</b> thay vì median toàn bảng, vì giá của laptop và chuột chênh nhau hàng chục lần.</li>
+<li><b>Chỉ dùng thư viện cần thiết</b>: ngoài NumPy, Pandas, Matplotlib chỉ có <code>openpyxl</code> để ghi Excel; không phụ thuộc SciPy hay scikit-learn.</li>
+<li><b>Tái lập được</b>: mọi thành phần ngẫu nhiên đều dùng seed.</li>
+</ul>
+
+<h3>4.3. Giao diện dòng lệnh</h3>
+<pre class="code">python run.py                              # sinh dữ liệu (nếu chưa có) và chạy toàn bộ pipeline
+python run.py generate --orders 10000      # tạo bộ dữ liệu khác
+python run.py run --input file_cua_ban.csv # phân tích dữ liệu của bạn
+python -m unittest discover -s tests -v    # chạy kiểm thử</pre>
+<p>Đầu ra gồm thư mục <code>outputs/figures/</code> (13 ảnh PNG), <code>clean_sales.csv</code>, <code>bao_cao_tong_hop.xlsx</code> (7 sheet)
+và <code>summary.json</code> (KPI, thống kê làm sạch, kết quả kiểm định, dự báo).</p>
+</section>
+
+<section>
+<h2 id="c5">5. Tiền xử lý và làm sạch dữ liệu</h2>
+<p>Quy tắc “rác vào – rác ra” đặc biệt đúng với phân tích dữ liệu: một đơn giá nhập thừa số 0 có thể làm doanh thu một sản phẩm
+tăng vọt và dẫn đến kết luận sai. Vì vậy dự án dành một bước riêng, có báo cáo rõ ràng.</p>
+
+<h3>5.1. Khảo sát chất lượng ban đầu</h3>
+<p>Hàm <code>quality_overview()</code> trả về kiểu dữ liệu, số ô thiếu, tỷ lệ thiếu và số giá trị khác nhau của từng cột.</p>
+<div class="tblwrap"><div class="cap"><b>Bảng 5.1.</b> Chất lượng dữ liệu thô</div><table class="tbl small"><thead><tr><th class="l">Cột</th><th class="l">Kiểu</th><th class="r">Số ô thiếu</th><th class="r">Tỷ lệ thiếu</th><th class="r">Số giá trị khác nhau</th></tr></thead><tbody><tr><td class="l"><code>order_id</code></td><td class="l">str</td><td class="r">0</td><td class="r">0,00%</td><td class="r">4.000</td></tr><tr><td class="l"><code>order_date</code></td><td class="l">str</td><td class="r">0</td><td class="r">0,00%</td><td class="r">365</td></tr><tr><td class="l"><code>customer_id</code></td><td class="l">str</td><td class="r">0</td><td class="r">0,00%</td><td class="r">1.158</td></tr><tr><td class="l"><code>product</code></td><td class="l">str</td><td class="r">0</td><td class="r">0,00%</td><td class="r">8</td></tr><tr><td class="l"><code>category</code></td><td class="l">str</td><td class="r">0</td><td class="r">0,00%</td><td class="r">3</td></tr><tr><td class="l"><code>region</code></td><td class="l">str</td><td class="r">26</td><td class="r">0,65%</td><td class="r">4</td></tr><tr><td class="l"><code>channel</code></td><td class="l">str</td><td class="r">0</td><td class="r">0,00%</td><td class="r">6</td></tr><tr><td class="l"><code>quantity</code></td><td class="l">float64</td><td class="r">41</td><td class="r">1,02%</td><td class="r">6</td></tr><tr><td class="l"><code>unit_price</code></td><td class="l">float64</td><td class="r">15</td><td class="r">0,37%</td><td class="r">1.804</td></tr><tr><td class="l"><code>discount</code></td><td class="l">float64</td><td class="r">0</td><td class="r">0,00%</td><td class="r">6</td></tr></tbody></table></div>
+<figure style="width:60%"><img src="../outputs/figures/01_missing.png"><figcaption><b>Hình 1.</b> Số ô thiếu theo cột trong dữ liệu thô. Cột <code>quantity</code> thiếu nhiều nhất.</figcaption></figure>
+
+<h3>5.2. Quy trình làm sạch</h3>
+<p>Hàm <code>clean()</code> thực hiện tuần tự sáu bước: (1) ép kiểu ngày và loại dòng thiếu khóa; (2) chuẩn hóa chuỗi; (3) xóa trùng;
+(4) xử lý ngoại lai; (5) điền giá trị thiếu; (6) tạo đặc trưng mới. Thứ tự quan trọng: xóa trùng trước khi tính median để các dòng lặp không làm lệch thống kê;
+xử lý ngoại lai <i>trước</i> khi điền thiếu để median không bị ngoại lai kéo lệch.</p>
+<div class="tblwrap"><div class="cap"><b>Bảng 5.2.</b> Kết quả làm sạch (4.020 dòng vào → 4.000 dòng ra)</div><table class="tbl"><thead><tr><th class="l">Vấn đề</th><th class="r">Số lượng</th><th class="l">Cách xử lý</th></tr></thead><tbody><tr><td class="l">Dòng trùng lặp hoàn toàn</td><td class="r">20</td><td class="l">Xóa (<code>drop_duplicates</code>)</td></tr><tr><td class="l">Kênh bán viết sai chữ hoa/khoảng trắng</td><td class="r">31</td><td class="l">Chuẩn hóa bằng từ điển ánh xạ</td></tr><tr><td class="l">Đơn giá ngoại lai (nhập thừa số 0)</td><td class="r">6</td><td class="l">IQR k = 3 theo sản phẩm → thay bằng median sản phẩm</td></tr><tr><td class="l">Số lượng bất thường (> 20)</td><td class="r">5</td><td class="l">Đặt thiếu rồi điền median sản phẩm</td></tr><tr><td class="l">Đơn giá thiếu (gồm cả ngoại lai đã loại)</td><td class="r">15</td><td class="l">Median đơn giá theo sản phẩm</td></tr><tr><td class="l">Số lượng thiếu (gồm cả bất thường đã loại)</td><td class="r">45</td><td class="l">Median số lượng theo sản phẩm</td></tr><tr><td class="l">Khu vực thiếu</td><td class="r">25</td><td class="l">Gán nhãn “Không rõ” (không đoán)</td></tr></tbody></table></div>
+<p>Số ngoại lai và dòng trùng phát hiện được <b>khớp chính xác</b> với số đã chèn (6 đơn giá, 5 số lượng, 20 dòng trùng): pipeline không bỏ sót và không xóa nhầm.
+Số “đã điền” lớn hơn số ô thiếu ban đầu vì gồm cả các ngoại lai bị đặt về thiếu rồi điền lại.</p>
+
+<h3>5.3. Xử lý ngoại lai đơn giá</h3>
+<p>Hình bên dưới so sánh phân bố đơn giá theo sản phẩm trước và sau làm sạch. Trước làm sạch, các điểm cam ở xa (ví dụ điện thoại gần 100 triệu đồng)
+làm trục kéo dài và nén các sản phẩm rẻ thành một vạch; sau làm sạch, mỗi sản phẩm chỉ còn dao động quanh giá niêm yết.</p>
+<figure style="width:80%"><img src="../outputs/figures/02_price_outliers.png"><figcaption><b>Hình 2.</b> Hộp râu (boxplot) đơn giá theo sản phẩm, trước và sau khi xử lý ngoại lai bằng IQR.</figcaption></figure>
+
+<h3>5.4. Đặc trưng mới</h3>
+<p>Sau khi dữ liệu sạch, doanh thu mỗi đơn được tính theo công thức <code>revenue = quantity × unit_price × (1 − discount)</code>; thêm
+<code>month</code>, <code>quarter</code>, <code>weekday</code>, <code>is_weekend</code> từ ngày đặt và <code>price_tier</code> (Cao cấp nếu đơn giá ≥ 3 triệu đồng).
+Các đặc trưng này được tính bằng thao tác vector hóa trên cả cột (ví dụ <code>np.where</code>), không dùng vòng lặp.</p>
+</section>
+
+<section>
+<h2 id="c6">6. Kết quả phân tích</h2>
+<h3>6.1. Tổng quan (KPI)</h3>
+<div class="tblwrap"><div class="cap"><b>Bảng 6.1.</b> Các chỉ số kinh doanh chính</div><table class="tbl"><thead><tr><th class="l">Chỉ số</th><th class="r">Giá trị</th></tr></thead><tbody><tr><td class="l">Tổng doanh thu</td><td class="r">22.134.083.650 đ (22,13 tỷ)</td></tr><tr><td class="l">Số đơn hàng</td><td class="r">4.000</td></tr><tr><td class="l">Số khách hàng</td><td class="r">1.158</td></tr><tr><td class="l">Tổng số lượng bán</td><td class="r">9.211</td></tr><tr><td class="l">Giá trị đơn trung bình</td><td class="r">5.533.521 đ</td></tr><tr><td class="l">Giá trị đơn trung vị</td><td class="r">2.641.700 đ</td></tr><tr><td class="l">Mức giảm giá trung bình</td><td class="r">3,96%</td></tr></tbody></table></div>
+<p>Giá trị đơn trung bình (5,53 triệu) <b>gấp 2,1 lần</b> trung vị (2,64 triệu).
+Khoảng cách này là dấu hiệu phân bố lệch: một số đơn giá trị rất lớn (laptop, điện thoại) kéo trung bình lên. Trong trường hợp này, trung vị phản ánh “đơn
+hàng điển hình” tốt hơn trung bình.</p>
+<figure style="width:72%"><img src="../outputs/figures/00_dashboard.png"><figcaption><b>Hình 3.</b> Bảng tổng hợp bốn góc nhìn chính của dữ liệu.</figcaption></figure>
+
+<h3>6.2. Doanh thu theo thời gian (Q1)</h3>
+<figure style="width:80%"><img src="../outputs/figures/03_monthly.png"><figcaption><b>Hình 4.</b> Doanh thu theo tháng và trung bình động 3 tháng.</figcaption></figure>
+<p>Doanh thu thấp nhất vào tháng 2 (1,22 tỷ) và cao nhất vào tháng 11 (3,26 tỷ,
+tăng 103,8% so với tháng trước). Hai tháng 11–12 chiếm 25,5% doanh thu cả năm. Theo quý: Q1 21,1%,
+Q2 21,1%, Q3 25,2%, Q4 32,7%. Kết quả khớp với các hệ số mùa vụ đã đặt khi sinh dữ liệu (Tết, khai giảng, cuối năm),
+cho thấy phương pháp phân tích “bắt” đúng tín hiệu có sẵn.</p>
+<div class="tblwrap"><div class="cap"><b>Bảng 6.2.</b> Doanh thu và số đơn theo tháng</div><table class="tbl small"><thead><tr><th class="l">Tháng</th><th class="r">Doanh thu (tỷ đồng)</th><th class="r">Số đơn</th><th class="r">Tăng trưởng so với tháng trước</th></tr></thead><tbody><tr><td class="l">Tháng 1</td><td class="r">1,92</td><td class="r">343</td><td class="r">–</td></tr><tr><td class="l">Tháng 2</td><td class="r">1,22</td><td class="r">235</td><td class="r">-36,4%</td></tr><tr><td class="l">Tháng 3</td><td class="r">1,52</td><td class="r">275</td><td class="r">+24,6%</td></tr><tr><td class="l">Tháng 4</td><td class="r">1,33</td><td class="r">268</td><td class="r">-12,4%</td></tr><tr><td class="l">Tháng 5</td><td class="r">1,73</td><td class="r">309</td><td class="r">+29,8%</td></tr><tr><td class="l">Tháng 6</td><td class="r">1,60</td><td class="r">253</td><td class="r">-7,4%</td></tr><tr><td class="l">Tháng 7</td><td class="r">1,58</td><td class="r">286</td><td class="r">-1,3%</td></tr><tr><td class="l">Tháng 8</td><td class="r">2,08</td><td class="r">359</td><td class="r">+31,9%</td></tr><tr><td class="l">Tháng 9</td><td class="r">1,91</td><td class="r">353</td><td class="r">-8,4%</td></tr><tr><td class="l">Tháng 10</td><td class="r">1,60</td><td class="r">284</td><td class="r">-16,3%</td></tr><tr><td class="l">Tháng 11</td><td class="r">3,26</td><td class="r">597</td><td class="r">+103,8%</td></tr><tr><td class="l">Tháng 12</td><td class="r">2,38</td><td class="r">438</td><td class="r">-26,8%</td></tr></tbody></table></div>
+<figure style="width:64%"><img src="../outputs/figures/08_weekday.png"><figcaption><b>Hình 5.</b> Doanh thu theo thứ trong tuần; hai cột cam là cuối tuần.</figcaption></figure>
+<p>Tổng doanh thu cả năm của thứ Bảy và Chủ nhật cao hơn các ngày khác, nhưng so sánh công bằng phải dựa trên <b>doanh thu trung bình mỗi ngày</b>
+(vì số ngày mỗi loại khác nhau). Kết quả: cuối tuần trung bình 65,4 triệu/ngày, ngày thường 58,8 triệu/ngày (chênh 11,3%).
+Kiểm định Welch cho t = 1,78, bậc tự do ≈ 203, <b>p = 0,076</b>. Vì p lớn hơn 0,05, ta <b>không đủ bằng chứng</b> để kết luận
+cuối tuần thực sự bán tốt hơn – chênh lệch quan sát được có thể chỉ là ngẫu nhiên. Đây là ví dụ cho thấy vì sao cần kiểm định thay vì nhìn biểu đồ.</p>
+
+<h3>6.3. Doanh thu theo sản phẩm (Q2)</h3>
+<figure style="width:72%"><img src="../outputs/figures/04_products.png"><figcaption><b>Hình 6.</b> Doanh thu và tỷ trọng theo sản phẩm.</figcaption></figure>
+<p>Điện thoại (35,3%) và Laptop (27,5%) cùng chiếm 62,8% doanh thu dù chỉ là hai trong tám sản phẩm.
+Ngược lại ba phụ kiện rẻ nhất (Bàn phím, Sạc dự phòng, Chuột) cộng lại chỉ khoảng 9,1%.
+Theo danh mục: Máy tính 47,9%, Điện thoại 35,3%, Phụ kiện 16,9%.</p>
+<figure style="width:72%"><img src="../outputs/figures/07_hist.png"><figcaption><b>Hình 7.</b> Phân bố giá trị đơn hàng (thang logarit).</figcaption></figure>
+<p>Biểu đồ phân bố cho thấy <b>hai cụm</b>: cụm quanh 1 triệu đồng (phụ kiện) và cụm quanh 10 triệu đồng (thiết bị). Phân bố hai đỉnh này giải thích vì sao trung bình
+và trung vị chênh nhau nhiều, và cho thấy nếu chỉ báo cáo “giá trị đơn trung bình” sẽ bỏ qua cấu trúc quan trọng của dữ liệu.</p>
+
+<h3>6.4. Khu vực và kênh bán (Q2)</h3>
+<figure style="width:72%"><img src="../outputs/figures/05_region_channel.png"><figcaption><b>Hình 8.</b> Doanh thu theo khu vực, chia theo kênh bán.</figcaption></figure>
+<p>TP.HCM dẫn đầu với 37,8%, sát theo sau là Hà Nội (36,3%); hai thành phố lớn chiếm 74,0% doanh thu.
+Về kênh, cửa hàng chiếm 43,7%, còn bán trực tuyến (website và sàn thương mại điện tử) chiếm 56,3%.
+Giá trị đơn trung bình của ba kênh gần như bằng nhau (khoảng 5,54 triệu), nên khác biệt giữa các kênh đến từ <i>số lượng đơn</i> chứ không phải từ giá trị mỗi đơn.
+Nhóm “Không rõ” (0,5%) là các đơn thiếu khu vực, được giữ lại để không làm mất doanh thu.</p>
+<figure style="width:80%"><img src="../outputs/figures/06_heatmap.png"><figcaption><b>Hình 9.</b> Doanh thu theo khu vực × sản phẩm (triệu đồng). Màu càng đậm doanh thu càng lớn.</figcaption></figure>
+
+<h3>6.5. Hiệu ứng khuyến mãi (Q3)</h3>
+<p>Trong tháng 11, 6 ngày khuyến mãi lớn (11/11 và 24–28/11) đạt trung bình 166,7 triệu/ngày, so với 94,0 triệu/ngày ở các ngày còn lại – gấp
+<b>1,77 lần</b>. Như vậy, trong dữ liệu này, lượng đơn tăng thêm đủ bù cho phần giảm giá. Cần lưu ý đây là kết quả của cách mô phỏng (đã đặt lượng đơn gấp 2,5 lần vào các ngày này),
+không phải một phát hiện về thị trường thực; trong dữ liệu thật, lợi nhuận (không chỉ doanh thu) mới là thước đo cần xét.</p>
+<div class="tblwrap"><div class="cap"><b>Bảng 6.3.</b> Nhóm phụ kiện: số lượng mua trung bình theo mức giảm giá</div><table class="tbl small"><thead><tr><th class="l">Mức giảm giá</th><th class="r">Số đơn</th><th class="r">Số lượng TB</th><th class="r">Doanh thu TB mỗi đơn</th></tr></thead><tbody><tr><td class="l">0%</td><td class="r">1.356</td><td class="r">3,04</td><td class="r">1.634.560 đ</td></tr><tr><td class="l">5%</td><td class="r">466</td><td class="r">2,97</td><td class="r">1.520.014 đ</td></tr><tr><td class="l">10%</td><td class="r">452</td><td class="r">3,05</td><td class="r">1.474.270 đ</td></tr><tr><td class="l">15%</td><td class="r">45</td><td class="r">3,02</td><td class="r">1.404.748 đ</td></tr><tr><td class="l">20%</td><td class="r">34</td><td class="r">2,62</td><td class="r">1.126.988 đ</td></tr><tr><td class="l">30%</td><td class="r">42</td><td class="r">2,57</td><td class="r">957.883 đ</td></tr></tbody></table></div>
+<p>Ở nhóm phụ kiện, số lượng mua trung bình là khoảng 3 sản phẩm/đơn ở các mức giảm 0–15%, nhưng thấp hơn ở nhóm giảm 20–30% (2,59 so với 3,03 sản phẩm/đơn).
+Nhóm giảm sâu chỉ có 76 đơn; kiểm định Welch cho p = 0,007. Với mức ý nghĩa 5%, chênh lệch này có ý nghĩa thống kê.
+Tuy nhiên bộ sinh dữ liệu <b>cố ý làm số lượng độc lập với giảm giá</b>, nên kết quả “có ý nghĩa” này thực chất là một <b>dương tính giả</b>. Để kiểm chứng, so sánh được lặp lại trên 60 bộ dữ liệu sinh bằng seed khác nhau: p &lt; 0,05 xuất hiện 4/60 lần (6,7%), sát mức 5% mà lý thuyết kỳ vọng khi không có hiệu ứng thật.
+Bài học: một p-value nhỏ trên nhóm nhỏ chưa đủ để kết luận; cần lặp lại, kiểm tra trên dữ liệu mới hoặc hiệu chỉnh khi so sánh nhiều lần.</p>
+
+<h3>6.6. Mức độ tập trung doanh thu – Pareto (Q4)</h3>
+<figure style="width:64%"><img src="../outputs/figures/09_pareto.png"><figcaption><b>Hình 10.</b> Đường Pareto theo khách hàng.</figcaption></figure>
+<p>Để đạt 80% doanh thu cần <b>563 khách (48,6% tổng số 1.158 khách)</b>. Con số này xa so với quy luật 80/20 kinh điển,
+nghĩa là doanh thu phân tán khá đều giữa nhiều khách và việc mất một vài khách lớn ít rủi ro hơn nhiều doanh nghiệp thực tế. Lý do: mã khách được rút ngẫu nhiên đồng đều khi mô phỏng;
+dữ liệu thật thường tập trung hơn.</p>
+
+<h3>6.7. Phân khúc khách hàng – RFM (Q5)</h3>
+<figure style="width:80%"><img src="../outputs/figures/10_rfm.png"><figcaption><b>Hình 11.</b> Số khách và doanh thu theo phân khúc RFM.</figcaption></figure>
+<div class="tblwrap"><div class="cap"><b>Bảng 6.4.</b> Đặc điểm các phân khúc RFM</div><table class="tbl small"><thead><tr><th class="l">Phân khúc</th><th class="r">Số khách</th><th class="r">Doanh thu</th><th class="r">% doanh thu</th><th class="r">Chi tiêu TB/khách</th><th class="r">Ngày kể từ lần mua cuối (TB)</th><th class="r">Số lần mua TB</th></tr></thead><tbody><tr><td class="l">VIP</td><td class="r">186</td><td class="r">7,14 tỷ</td><td class="r">32,2%</td><td class="r">38,4 triệu</td><td class="r">18</td><td class="r">6,0</td></tr><tr><td class="l">Trung thành</td><td class="r">236</td><td class="r">6,54 tỷ</td><td class="r">29,5%</td><td class="r">27,7 triệu</td><td class="r">43</td><td class="r">4,5</td></tr><tr><td class="l">Cần chăm sóc</td><td class="r">441</td><td class="r">6,69 tỷ</td><td class="r">30,2%</td><td class="r">15,2 triệu</td><td class="r">75</td><td class="r">3,0</td></tr><tr><td class="l">Nguy cơ rời bỏ</td><td class="r">295</td><td class="r">1,77 tỷ</td><td class="r">8,0%</td><td class="r">6,0 triệu</td><td class="r">166</td><td class="r">1,7</td></tr></tbody></table></div>
+<p>Phân khúc VIP gồm 186 khách (16,1% số khách) nhưng đóng góp 32,2% doanh thu, và có chi tiêu trung bình/khách cao gấp
+6,4 lần nhóm “Nguy cơ rời bỏ”. Gợi ý hành động: giữ chân VIP bằng ưu đãi riêng, kích hoạt lại nhóm “Nguy cơ rời bỏ”
+bằng khuyến mãi quay lại, và đưa nhóm “Cần chăm sóc” – đông nhất – lên nhóm Trung thành.</p>
+
+<h3>6.8. Tương quan giữa các biến</h3>
+<figure style="width:46%"><img src="../outputs/figures/11_corr.png"><figcaption><b>Hình 12.</b> Ma trận hệ số tương quan Pearson.</figcaption></figure>
+<p>Doanh thu tương quan mạnh với đơn giá (r = 0,89) – hiển nhiên vì hàng đắt tiền kéo giá trị đơn lên – nhưng gần như không tương quan với mức giảm giá.
+Đáng chú ý, số lượng và đơn giá tương quan <b>âm</b> (r = -0,54): người mua phụ kiện rẻ lấy nhiều cái, người mua hàng đắt chỉ lấy 1–2 cái.
+Đây là tương quan do <i>cơ cấu sản phẩm</i> chứ không phải quan hệ nhân quả “giá cao khiến mua ít”; cần cẩn trọng khi diễn giải hệ số tương quan.</p>
+</section>
+
+<section>
+<h2 id="c7">7. Dự báo doanh thu (Q6)</h2>
+<h3>7.1. Phương pháp</h3>
+<p>Mô hình gồm hai thành phần nhân với nhau: (1) <b>xu hướng</b> – đường thẳng khớp bằng <code>np.polyfit</code> trên 12 điểm tháng
+(độ dốc 98 triệu mỗi tháng, R² = 0,41); (2) <b>chỉ số mùa vụ</b> – tỷ số giữa doanh thu thực và giá trị xu hướng của từng tháng.
+Dự báo tháng tiếp theo = xu hướng ngoại suy × chỉ số mùa vụ của tháng tương ứng. Để đối chiếu, ta dùng mô hình <i>naive theo mùa</i>: lấy doanh thu cùng tháng năm trước.</p>
+<figure style="width:80%"><img src="../outputs/figures/12_forecast.png"><figcaption><b>Hình 13.</b> Doanh thu thực tế, xu hướng tuyến tính và dự báo 3 tháng đầu năm 2026.</figcaption></figure>
+<div class="tblwrap"><div class="cap"><b>Bảng 7.1.</b> Dự báo 3 tháng tiếp theo</div><table class="tbl"><thead><tr><th class="l">Tháng</th><th class="r">Dự báo (xu hướng × mùa vụ)</th><th class="r">Đối chứng: cùng kỳ năm trước</th><th class="r">Chênh lệch</th></tr></thead><tbody><tr><td class="l">Tháng 1/2026</td><td class="r">3,64 tỷ</td><td class="r">1,92 tỷ</td><td class="r">+90%</td></tr><tr><td class="l">Tháng 2/2026</td><td class="r">2,24 tỷ</td><td class="r">1,22 tỷ</td><td class="r">+83%</td></tr><tr><td class="l">Tháng 3/2026</td><td class="r">2,71 tỷ</td><td class="r">1,52 tỷ</td><td class="r">+78%</td></tr></tbody></table></div>
+
+<h3>7.2. Đánh giá và hạn chế</h3>
+<p>Không thể đánh giá mô hình bằng cách so với chính dữ liệu đã dùng để khớp: chỉ số mùa vụ được tính từ chính 12 tháng này nên mô hình sẽ “khớp hoàn hảo” (sai số 0%) một cách vô nghĩa.
+Thay vào đó, dự án giữ lại 3 tháng cuối làm tập kiểm tra và chỉ khớp xu hướng trên 9 tháng đầu. Kết quả: mô hình xu hướng có MAPE = <b>25,1%</b>,
+so với 27,8% nếu chỉ dùng trung bình – tức cải thiện không nhiều. R² của xu hướng chỉ 0,41 vì mùa vụ làm doanh thu dao động mạnh quanh đường thẳng.</p>
+<p>Đáng lưu ý, dự báo tháng 1/2026 cao hơn đáng kể so với tháng 1/2025: xu hướng bị đẩy lên bởi đợt tăng mạnh cuối năm, rồi lại nhân với chỉ số mùa vụ cao của tháng 1.
+Đây là biểu hiện của việc <b>chỉ có một năm dữ liệu</b>: không thể tách rõ mùa vụ khỏi xu hướng. Vì vậy kết quả dự báo trong báo cáo chỉ nên xem là <b>minh họa kỹ thuật</b>.
+Để dự báo đáng tin cần ít nhất 2–3 năm dữ liệu và các mô hình chuyên dụng (Holt-Winters, ETS, SARIMA), cùng đánh giá bằng kiểm tra chéo theo thời gian.</p>
+</section>
+
+<section>
+<h2 id="c8">8. Kiểm thử và đảm bảo chất lượng</h2>
+<p>Dự án có <b>21 bài kiểm thử tự động</b> viết bằng <code>unittest</code> (thư viện chuẩn của Python; <code>pytest</code> cũng chạy được).
+Các bài kiểm thử không chỉ kiểm tra “chạy không lỗi” mà kiểm tra <b>tính chất đúng đắn</b> của kết quả: tổng các phần phải bằng tổng thể,
+tỷ trọng cộng đúng 100%, đường Pareto đơn điệu, công thức doanh thu chính xác và hàm làm sạch không làm thay đổi đầu vào.</p>
+<div class="tblwrap"><div class="cap"><b>Bảng 8.1.</b> Danh sách bài kiểm thử</div><table class="tbl small"><thead><tr><th class="l">Nhóm</th><th class="l">Bài kiểm thử</th><th class="l">Nội dung kiểm tra</th></tr></thead><tbody><tr><td class="l">Sinh dữ liệu</td><td class="l"><code>test_clean_mode_has_no_missing</code></td><td class="l">Chế độ dirty=False không có ô thiếu, đúng số dòng</td></tr><tr><td class="l">Sinh dữ liệu</td><td class="l"><code>test_dirty_mode_injects_problems</code></td><td class="l">Chế độ dirty=True thật sự chèn ô thiếu và dòng trùng</td></tr><tr><td class="l">Sinh dữ liệu</td><td class="l"><code>test_reproducible_with_seed</code></td><td class="l">Cùng seed cho ra cùng dữ liệu (tái lập được)</td></tr><tr><td class="l">Làm sạch</td><td class="l"><code>test_channel_normalised</code></td><td class="l">Kênh bán được chuẩn hóa về đúng 3 giá trị</td></tr><tr><td class="l">Làm sạch</td><td class="l"><code>test_duplicates_removed</code></td><td class="l">Xóa đúng 20 dòng trùng, order_id là duy nhất</td></tr><tr><td class="l">Làm sạch</td><td class="l"><code>test_input_not_mutated</code></td><td class="l">Hàm clean() không làm thay đổi dữ liệu đầu vào</td></tr><tr><td class="l">Làm sạch</td><td class="l"><code>test_iqr_bounds</code></td><td class="l">Cận IQR phát hiện đúng giá trị ngoại lai</td></tr><tr><td class="l">Làm sạch</td><td class="l"><code>test_missing_column_rejected</code></td><td class="l">File CSV thiếu cột bắt buộc bị từ chối với ValueError</td></tr><tr><td class="l">Làm sạch</td><td class="l"><code>test_no_missing_after_clean</code></td><td class="l">Sau làm sạch không còn ô thiếu ở các cột chính</td></tr><tr><td class="l">Làm sạch</td><td class="l"><code>test_outliers_handled</code></td><td class="l">Không còn số lượng > 20 hay đơn giá lệch quá 1,5 lần median</td></tr><tr><td class="l">Làm sạch</td><td class="l"><code>test_revenue_formula</code></td><td class="l">revenue = số lượng × đơn giá × (1 − giảm giá)</td></tr><tr><td class="l">Phân tích</td><td class="l"><code>test_corr_diagonal_is_one</code></td><td class="l">Đường chéo ma trận tương quan bằng 1</td></tr><tr><td class="l">Phân tích</td><td class="l"><code>test_forecast_on_perfect_line</code></td><td class="l">Trên đường thẳng hoàn hảo, R² = 1 và dự báo đúng 1300/1400/1500</td></tr><tr><td class="l">Phân tích</td><td class="l"><code>test_group_sums_equal_total</code></td><td class="l">Tổng theo tháng/sản phẩm/khu vực đều bằng tổng doanh thu</td></tr><tr><td class="l">Phân tích</td><td class="l"><code>test_kpi_consistency</code></td><td class="l">KPI khớp trực tiếp với tổng/đếm của dữ liệu</td></tr><tr><td class="l">Phân tích</td><td class="l"><code>test_pareto_monotonic_and_ends_at_100</code></td><td class="l">Đường Pareto tăng dần và kết thúc ở 100%</td></tr><tr><td class="l">Phân tích</td><td class="l"><code>test_rfm_scores_in_range</code></td><td class="l">Điểm RFM nằm trong 3–12, mọi khách đều có phân khúc</td></tr><tr><td class="l">Phân tích</td><td class="l"><code>test_shares_sum_to_100</code></td><td class="l">Tỷ trọng sản phẩm cộng lại đúng 100%</td></tr><tr><td class="l">Thống kê</td><td class="l"><code>test_weekend_effect_detected</code></td><td class="l">Hàm so sánh cuối tuần/ngày thường chạy đúng chiều</td></tr><tr><td class="l">Thống kê</td><td class="l"><code>test_welch_matches_scipy</code></td><td class="l">Welch t-test tự cài khớp với SciPy (t chính xác, p lệch < 0,01)</td></tr><tr><td class="l">Toàn pipeline</td><td class="l"><code>test_end_to_end_creates_outputs</code></td><td class="l">Chạy trọn pipeline: đủ 13 hình, CSV, Excel, JSON</td></tr></tbody></table></div>
+<p>Hai kỹ thuật đáng chú ý: (1) <b>kiểm thử với đáp án biết trước</b> – dữ liệu đường thẳng hoàn hảo phải cho R² = 1 và dự báo đúng 1300, 1400, 1500; số ngoại lai/trùng
+bị phát hiện phải bằng số đã chèn; (2) <b>đối chiếu với thư viện tham chiếu</b> – Welch t-test tự cài được so với SciPy trên dữ liệu ngẫu nhiên.
+Kết quả: 21/21 bài đạt.</p>
+<pre class="code">$ python -m unittest discover -s tests
+...................
+----------------------------------------------------------------------
+Ran 21 tests in 3.8s
+
+OK</pre>
+</section>
+
+<section>
+<h2 id="c9">9. Hướng dẫn cài đặt và sử dụng</h2>
+<h3>9.1. Yêu cầu</h3>
+<p>Python 3.10 trở lên. Các thư viện: <code>numpy</code>, <code>pandas</code>, <code>matplotlib</code>, <code>openpyxl</code> (ghi trong <code>requirements.txt</code>).</p>
+<h3>9.2. Các bước</h3>
+<ol>
+<li>Tải mã nguồn: <code>git clone &lt;link-repo&gt;</code> rồi <code>cd phan-tich-doanh-so</code>.</li>
+<li>Tạo môi trường ảo: <code>python -m venv .venv</code> và kích hoạt (Windows: <code>.venv\Scripts\activate</code>; macOS/Linux: <code>source .venv/bin/activate</code>).</li>
+<li>Cài thư viện: <code>pip install -r requirements.txt</code>.</li>
+<li>Chạy: <code>python run.py</code>. Lần đầu chương trình tự sinh <code>data/raw_sales.csv</code>.</li>
+<li>Xem kết quả trong <code>outputs/</code>: hình PNG, <code>bao_cao_tong_hop.xlsx</code>, <code>summary.json</code>.</li>
+</ol>
+<h3>9.3. Dùng dữ liệu riêng</h3>
+<p>Chuẩn bị file CSV (mã hóa UTF-8) có đủ 10 cột như Bảng 3.1, rồi chạy <code>python run.py run --input duong_dan.csv</code>.
+Nếu thiếu cột, chương trình báo lỗi rõ ràng và liệt kê cột còn thiếu thay vì chạy tiếp với kết quả sai.</p>
+<h3>9.4. Sản phẩm bàn giao</h3>
+<table class="tbl"><thead><tr><th class="l">Sản phẩm</th><th class="l">Nơi lưu</th></tr></thead><tbody>
+<tr><td>Mã nguồn (GitHub)</td><td class="ph">[dán link GitHub]</td></tr>
+<tr><td>Video demo (YouTube)</td><td class="ph">[dán link YouTube]</td></tr>
+<tr><td>Báo cáo PDF</td><td><code>docs/BaoCao_PhanTichDuLieu.pdf</code></td></tr>
+<tr><td>Bảng tổng hợp Excel</td><td><code>outputs/bao_cao_tong_hop.xlsx</code></td></tr>
+</tbody></table>
+</section>
+
+<section>
+<h2 id="c10">10. Kết luận và hướng phát triển</h2>
+<h3>10.1. Trả lời các câu hỏi nghiên cứu</h3>
+<table class="tbl"><thead><tr><th class="l">Mã</th><th class="l">Kết luận (trên dữ liệu mô phỏng)</th></tr></thead><tbody>
+<tr><td>Q1</td><td>Doanh thu đỉnh tháng 11 (3,26 tỷ), thấp nhất tháng 2. Cuối tuần nhỉnh hơn ngày thường 11,3% nhưng chưa có ý nghĩa thống kê (p = 0,076).</td></tr>
+<tr><td>Q2</td><td>Điện thoại + Laptop = 62,8% doanh thu; TP.HCM và Hà Nội = 74,0%; cửa hàng là kênh lớn nhất (43,7%).</td></tr>
+<tr><td>Q3</td><td>Ngày khuyến mãi lớn có doanh thu/ngày gấp 1,77 lần ngày thường trong tháng 11; hiệu ứng này do cách mô phỏng.</td></tr>
+<tr><td>Q4</td><td>Cần 49% khách để đạt 80% doanh thu – doanh thu phân tán, không theo 80/20.</td></tr>
+<tr><td>Q5</td><td>4 phân khúc RFM; VIP (186 khách) tạo 32,2% doanh thu.</td></tr>
+<tr><td>Q6</td><td>Dự báo 3 tháng đầu 2026 là 3,64 tỷ, 2,24 tỷ, 2,71 tỷ; chỉ mang tính minh họa vì có một năm dữ liệu (MAPE kiểm tra 25,1%).</td></tr>
+</tbody></table>
+
+<h3>10.2. Kết quả đạt được</h3>
+<ul>
+<li>Pipeline phân tích hoàn chỉnh, chạy một lệnh, kết quả tái lập được nhờ seed cố định.</li>
+<li>Vận dụng đủ ba thư viện của đề tài; phần việc nào cũng có mã nguồn rõ ràng và bài kiểm thử.</li>
+<li>Làm sạch có báo cáo minh bạch: số lỗi phát hiện khớp chính xác số lỗi đã chèn.</li>
+<li>13 biểu đồ thống nhất phong cách, tiêu đề nêu kết luận; báo cáo Excel 7 sheet và bản tóm tắt JSON.</li>
+<li>Thành thật về giới hạn: kiểm định thống kê cho kết luận “chưa đủ bằng chứng” khi đúng như vậy; dự báo được đánh giá bằng tập kiểm tra thay vì tự khớp.</li>
+</ul>
+
+<h3>10.3. Hạn chế</h3>
+<ul>
+<li><b>Dữ liệu mô phỏng</b>: các kết luận phản ánh cách sinh dữ liệu; không thể suy ra thị trường thực.</li>
+<li><b>Một năm dữ liệu</b>: không tách được mùa vụ khỏi xu hướng; dự báo thiếu tin cậy.</li>
+<li><b>Chưa có lợi nhuận</b>: chỉ phân tích doanh thu; thiếu giá vốn nên không đánh giá được hiệu quả khuyến mãi.</li>
+<li><b>Điền thiếu bằng median</b> là phương pháp đơn giản; chưa xét đa biến hay đo độ bất định do điền thiếu.</li>
+<li><b>p-value xấp xỉ chuẩn</b> trong kiểm định Welch, chính xác khi bậc tự do lớn như ở đây (≈ 203) nhưng không phù hợp mẫu rất nhỏ.</li>
+</ul>
+
+<h3>10.4. Hướng phát triển</h3>
+<ul>
+<li>Thay dữ liệu mô phỏng bằng dữ liệu bán lẻ công khai hoặc dữ liệu thật đã ẩn danh; so sánh kết quả.</li>
+<li>Thêm giá vốn để phân tích lợi nhuận và phân tích điểm hòa vốn của khuyến mãi.</li>
+<li>Dự báo bằng Holt-Winters/ETS với nhiều năm dữ liệu và kiểm tra chéo theo thời gian.</li>
+<li>Xây dựng dashboard tương tác (Streamlit hoặc Flask, nối với SQLite) để người không biết lập trình tự khám phá.</li>
+<li>Phân cụm khách hàng bằng K-means và so sánh với phân khúc RFM theo luật.</li>
+</ul>
+</section>
+
+<section>
+<h2 id="ref">Tài liệu tham khảo</h2>
+<ol class="refs">
+<li>McKinney, W. (2022). <i>Python for Data Analysis</i> (3rd ed.). O’Reilly Media.</li>
+<li>Harris, C. R., et al. (2020). Array programming with NumPy. <i>Nature</i>, 585, 357–362.</li>
+<li>Hunter, J. D. (2007). Matplotlib: A 2D graphics environment. <i>Computing in Science &amp; Engineering</i>, 9(3), 90–95.</li>
+<li>Tukey, J. W. (1977). <i>Exploratory Data Analysis</i>. Addison-Wesley.</li>
+<li>Hyndman, R. J., &amp; Athanasopoulos, G. (2021). <i>Forecasting: Principles and Practice</i> (3rd ed.). OTexts. https://otexts.com/fpp3/</li>
+<li>Tài liệu chính thức NumPy: https://numpy.org/doc/stable/</li>
+<li>Tài liệu chính thức pandas: https://pandas.pydata.org/docs/</li>
+<li>Tài liệu chính thức Matplotlib: https://matplotlib.org/stable/</li>
+<li>Welch, B. L. (1947). The generalization of “Student’s” problem when several different population variances are involved. <i>Biometrika</i>, 34(1–2), 28–35.</li>
+</ol>
+</section>
+
+<section>
+<h2 id="pl">Phụ lục A. Trích đoạn mã nguồn</h2>
+<p>Các đoạn dưới đây được trích trực tiếp từ mã nguồn (<code>src/salesanalysis/</code>); toàn bộ dự án có tại kho mã nguồn.</p>
+<div class="codetitle">cleaning.py – clean(): làm sạch và tạo đặc trưng</div><pre class="code">def clean(df: pd.DataFrame) -&gt; tuple[pd.DataFrame, CleaningReport]:
+    &quot;&quot;&quot;Làm sạch toàn bộ và trả về (DataFrame sạch, báo cáo).&quot;&quot;&quot;
+    rep = CleaningReport(rows_in=len(df), missing_before=df.isna().sum().to_dict())
+    df = df.copy()
+
+    # 1) Kiểu dữ liệu
+    df[&quot;order_date&quot;] = pd.to_datetime(df[&quot;order_date&quot;], errors=&quot;coerce&quot;)
+    df = df.dropna(subset=[&quot;order_date&quot;, &quot;order_id&quot;, &quot;product&quot;])
+
+    # 2) Chuẩn hóa chuỗi (khoảng trắng, chữ hoa)
+    for col in [&quot;product&quot;, &quot;category&quot;, &quot;region&quot;, &quot;channel&quot;, &quot;customer_id&quot;]:
+        df[col] = df[col].astype(&quot;string&quot;).str.strip()
+    fixed = df[&quot;channel&quot;].str.upper().isin(CHANNEL_MAP) &amp; ~df[&quot;channel&quot;].isin(CHANNEL_MAP.values())
+    rep.channel_fixed = int(fixed.sum())
+    df[&quot;channel&quot;] = df[&quot;channel&quot;].str.upper().map(CHANNEL_MAP).fillna(df[&quot;channel&quot;])
+
+    # 3) Dòng trùng
+    before = len(df)
+    df = df.drop_duplicates()
+    rep.duplicates_removed = before - len(df)
+
+    # 4) Ngoại lai: tính giới hạn IQR theo từng sản phẩm (giá) rồi thay bằng median sản phẩm
+    med_price = df.groupby(&quot;product&quot;)[&quot;unit_price&quot;].transform(&quot;median&quot;)
+    lo = df.groupby(&quot;product&quot;)[&quot;unit_price&quot;].transform(lambda s: iqr_bounds(s.dropna(), 3.0)[0])
+    hi = df.groupby(&quot;product&quot;)[&quot;unit_price&quot;].transform(lambda s: iqr_bounds(s.dropna(), 3.0)[1])
+    bad_price = (df[&quot;unit_price&quot;] &lt; lo) | (df[&quot;unit_price&quot;] &gt; hi)
+    rep.outliers_price = int(bad_price.sum())
+    df.loc[bad_price, &quot;unit_price&quot;] = med_price[bad_price]
+
+    bad_qty = df[&quot;quantity&quot;] &gt; 20  # ngưỡng nghiệp vụ: một đơn lẻ không quá 20 sản phẩm
+    rep.outliers_quantity = int(bad_qty.sum())
+    df.loc[bad_qty, &quot;quantity&quot;] = np.nan
+
+    # 5) Điền thiếu: số -&gt; median theo sản phẩm; chuỗi -&gt; &quot;Không rõ&quot;
+    rep.price_filled = int(df[&quot;unit_price&quot;].isna().sum())
+    df[&quot;unit_price&quot;] = df[&quot;unit_price&quot;].fillna(med_price).fillna(df[&quot;unit_price&quot;].median())
+    rep.quantity_filled = int(df[&quot;quantity&quot;].isna().sum())
+    med_qty = df.groupby(&quot;product&quot;)[&quot;quantity&quot;].transform(&quot;median&quot;)
+    df[&quot;quantity&quot;] = df[&quot;quantity&quot;].fillna(med_qty).round().astype(int)
+    rep.region_filled = int(df[&quot;region&quot;].isna().sum())
+    df[&quot;region&quot;] = df[&quot;region&quot;].fillna(&quot;Không rõ&quot;)
+
+    # 6) Đặc trưng mới (feature engineering)
+    df[&quot;revenue&quot;] = df[&quot;quantity&quot;] * df[&quot;unit_price&quot;] * (1 - df[&quot;discount&quot;])
+    df[&quot;month&quot;] = df[&quot;order_date&quot;].dt.month
+    df[&quot;quarter&quot;] = df[&quot;order_date&quot;].dt.quarter
+    df[&quot;weekday&quot;] = df[&quot;order_date&quot;].dt.dayofweek  # 0 = thứ Hai
+    df[&quot;is_weekend&quot;] = df[&quot;weekday&quot;] &gt;= 5
+    df[&quot;price_tier&quot;] = np.where(df[&quot;unit_price&quot;] &gt;= 3_000_000, &quot;Cao cấp&quot;, &quot;Phổ thông&quot;)
+
+    df = df.sort_values(&quot;order_date&quot;).reset_index(drop=True)
+    rep.rows_out = len(df)
+    return df, rep</pre>
+</section>
+<section>
+<div class="codetitle">analysis.py – rfm(): phân khúc khách hàng</div><pre class="code">def rfm(df: pd.DataFrame) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Recency - Frequency - Monetary và phân khúc khách hàng.&quot;&quot;&quot;
+    now = df[&quot;order_date&quot;].max() + pd.Timedelta(days=1)
+    r = df.groupby(&quot;customer_id&quot;).agg(
+        recency=(&quot;order_date&quot;, lambda s: (now - s.max()).days),
+        frequency=(&quot;order_id&quot;, &quot;count&quot;),
+        monetary=(&quot;revenue&quot;, &quot;sum&quot;),
+    )
+    # qcut theo thứ hạng; rank(method=&quot;first&quot;) tránh lỗi trùng biên
+    r[&quot;R&quot;] = pd.qcut(r[&quot;recency&quot;].rank(method=&quot;first&quot;), 4, labels=[4, 3, 2, 1]).astype(int)
+    r[&quot;F&quot;] = pd.qcut(r[&quot;frequency&quot;].rank(method=&quot;first&quot;), 4, labels=[1, 2, 3, 4]).astype(int)
+    r[&quot;M&quot;] = pd.qcut(r[&quot;monetary&quot;].rank(method=&quot;first&quot;), 4, labels=[1, 2, 3, 4]).astype(int)
+    r[&quot;score&quot;] = r[&quot;R&quot;] + r[&quot;F&quot;] + r[&quot;M&quot;]
+    r[&quot;segment&quot;] = pd.cut(r[&quot;score&quot;], bins=[0, 5, 8, 10, 12],
+                          labels=[&quot;Nguy cơ rời bỏ&quot;, &quot;Cần chăm sóc&quot;, &quot;Trung thành&quot;, &quot;VIP&quot;])
+    return r</pre>
+</section></body></html>
